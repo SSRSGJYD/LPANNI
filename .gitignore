@@ -1,3 +1,10 @@
+# dataset
+data/
+
+# visual studio
+.vs/
+Debug/
+
 # Prerequisites
 *.d
 
