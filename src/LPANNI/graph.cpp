@@ -55,9 +55,7 @@ Graph::Graph(string file)
 	sgetstr(p);
 	this->edgeNum = sgetunsigned(p);
 	this->nodes.resize(550000);
-	for (unsigned i = 0; i < this->nodeNum; i++) {
-		this->nodes[i].id = i + 1;
-	}
+
 	// read in edges
 	sgetline(p);
 	sgetline(p);
@@ -66,12 +64,24 @@ Graph::Graph(string file)
 		s = sgetunsigned(p);
 		sgetstr(p);
 		e = sgetunsigned(p);
-		this->nodes[s - 1].adjNodes.insert(e);
-		this->nodes[e - 1].adjNodes.insert(s);
+		this->nodes[s].adjNodes.insert(ToEdge(e));
+		this->nodes[e].adjNodes.insert(ToEdge(s));
+		this->nodes[s].id = s;
+		this->nodes[e].id = e;
 		if (**p == '\0')
 			break;
 		sgetstr(p);
 	}
 	free(text);
+	return;
+}
+
+void Graph::printNI()
+{
+	auto endit = this->nodes.end();
+	for (auto it = this->nodes.begin(); it != endit; it++) {
+		if (it->id == 0) continue;
+		cout << "id: " << it->id << ", NI: " << it->NI << endl;
+	}
 	return;
 }

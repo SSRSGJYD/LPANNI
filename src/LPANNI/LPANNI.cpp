@@ -2,12 +2,17 @@
 //
 
 #include <iostream>
+#include "algorithm.h"
 #include "graph.h"
 
 int main()
 {
-	Graph graph = Graph(string("../../data/Amazon/amazon.ungraph.txt"));
-	//Graph graph = Graph(string("../../data/Amazon/amazon.ungraph_few.txt"));
-	cout << graph.nodes.size();
+	//Graph graph = Graph(string("../../data/Amazon/amazon.ungraph.txt"));
+	Graph graph = Graph(string("../../data/sample.txt"));
+	
+	LPANNI worker = LPANNI();
+	worker.calculate_NI(graph);
+	graph.printNI();
+
 	return 0;
 }

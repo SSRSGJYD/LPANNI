@@ -151,10 +151,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="algorithm.cpp" />
     <ClCompile Include="graph.cpp" />
     <ClCompile Include="LPANNI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="algorithm.h" />
     <ClInclude Include="graph.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
