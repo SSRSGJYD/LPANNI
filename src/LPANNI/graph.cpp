@@ -124,6 +124,21 @@ void Graph::printNNI()
 	return;
 }
 
+void Graph::printCommunityPerNode()
+{
+	auto endit = this->nodes.end();
+	for (auto it = this->nodes.begin(); it != endit; it++) {
+		if (it->id == 0) continue;
+		cout << "id: " << it->id << ", community: ";
+		auto sendit = it->communities.end();
+		for (auto sit = it->communities.begin(); sit != sendit; sit++) {
+			cout << *sit << " ";
+		}
+		cout << endl;
+	}
+	return;
+}
+
 ToEdgeInfo * getEdgeInfo(Graph & g)
 {
 	g.firstValidPool += 1;

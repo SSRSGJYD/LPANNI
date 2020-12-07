@@ -1,7 +1,7 @@
 #pragma once
 
-#include <vector>
 #include <set>
+#include <vector>
 using namespace std;
 
 typedef struct ToEdgeInfo {
@@ -55,7 +55,41 @@ typedef struct Node {
 	float NI;
 	float total_s;
 	set<ToEdge> adjNodes;
+	vector<unsigned int> communities;
+	unsigned int label_set_size;
+	unsigned int dominant_c;
+	float dominant_b;
 } Node;
+
+typedef struct vQueueElem {
+	vQueueElem(unsigned int id, float NI) : id(id), NI(NI) {}
+	unsigned int id;
+	float NI;
+	bool operator==(const vQueueElem b) const
+	{
+		return this->NI == b.NI;
+	}
+	bool operator!=(const vQueueElem b) const
+	{
+		return this->NI != b.NI;
+	}
+	bool operator<=(const vQueueElem b) const
+	{
+		return this->NI <= b.NI;
+	}
+	bool operator<(const vQueueElem b) const
+	{
+		return this->NI < b.NI;
+	}
+	bool operator>=(const vQueueElem b) const
+	{
+		return this->NI >= b.NI;
+	}
+	bool operator>(const vQueueElem b) const
+	{
+		return this->NI > b.NI;
+	}
+} vQueueElem;
 
 class Graph 
 {
@@ -67,7 +101,9 @@ public:
 	void printNI();
 	void printSim();
 	void printNNI();
+	void printCommunityPerNode();
 
+public:
 	unsigned int nodeNum, edgeNum;
 	vector<Node> nodes; // starts from nodes[1]
 	ToEdgeInfo *EdgeInfoPool;

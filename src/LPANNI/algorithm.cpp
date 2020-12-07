@@ -1,4 +1,5 @@
 #include <iostream>
+#include <map>
 #include "algorithm.h"
 
 void LPANNI::calculate_NI(Graph & g)
@@ -46,21 +47,19 @@ void LPANNI::calculate_SIM_NNI(Graph & g, unsigned int alpha)
 	auto endit = g.nodes.end();
 	for (auto it = g.nodes.begin(); it != endit; it++) {
 		if (it->id == 0) continue;
-		//cout << it->id << " ";
 		auto sendit = it->adjNodes.end();
 		for (auto sit = it->adjNodes.upper_bound(ToEdge(it->id, g)); sit != sendit; sit++) {
 			// work on this node and sit
-			//cout << sit->id << " ";
 			unsigned int plen = 1;
-			set<unsigned int> *pLastDest = nullptr;
+			vector<unsigned int> *pLastDest = nullptr;
 			while (plen <= alpha) {
-				set<unsigned int> *pNewDest = new set<unsigned int>();
+				vector<unsigned int> *pNewDest = new vector<unsigned int>();
 				if (plen == 1) {
 					for (auto sit2 = it->adjNodes.begin(); sit2 != sendit; sit2++) {
 						if(sit2->id == sit->id)
 							sit->pInfo->s += 1.0;
 						else
-							pNewDest->insert(sit2->id);
+							pNewDest->push_back(sit2->id);
 					}
 				}
 				else {
@@ -71,8 +70,8 @@ void LPANNI::calculate_SIM_NNI(Graph & g, unsigned int alpha)
 						for (auto sit3 = g.nodes[*sit2].adjNodes.begin(); sit3 != endsit2; sit3++) {
 							if(sit3->id == sit->id)
 								sit->pInfo->s += 1.0 / plen;
-							else
-								pNewDest->insert(sit3->id);
+							else if(sit3->id != it->id)
+								pNewDest->push_back(sit3->id);
 						}
 					}
 				}
@@ -83,6 +82,7 @@ void LPANNI::calculate_SIM_NNI(Graph & g, unsigned int alpha)
 			auto it2 = g.nodes[sit->id].adjNodes.find(ToEdge(it->id, g));
 			it2->pInfo->s = sit->pInfo->s;
 		}
+		int a = 1;
 	}
 
 	// calculate sum of s for each node
@@ -114,6 +114,95 @@ void LPANNI::calculate_SIM_NNI(Graph & g, unsigned int alpha)
 			if (it->id == sit->id) continue;
 			sit->pInfo->nni = sqrt(g.nodes[sit->id].NI * sit->pInfo->sim / max_sim);
 		}
+	}
+
+	return;
+}
+
+void LPANNI::propagation(Graph & g, unsigned int T)
+{
+	// sort the nodes by NI & initialize
+	multiset<vQueueElem> vQueue;
+	auto endit = g.nodes.end();
+	for (auto it = g.nodes.begin(); it != endit; it++) {
+		if (it->id == 0) continue;
+		vQueue.insert(vQueueElem(it->id, it->NI));
+		Node* pNode = &(g.nodes[it->id]);
+		pNode->dominant_c = it->id;
+		pNode->dominant_b = 1.0;
+		pNode->label_set_size = 1;
+	}
+
+	// label propagation
+	unsigned int t = 0;
+	auto endsit = vQueue.end();
+	while (t < T) {
+		bool update = false;
+		// for each node u in vQueue
+		for (auto sit = vQueue.begin(); sit != endsit; sit++) {
+			Node* pNode = &(g.nodes[sit->id]);
+			set<ToEdge> *pAdjNodes = &(pNode->adjNodes);
+			auto endsit2 = pAdjNodes->end();
+			map<unsigned int, float> bMap; // <c, sum(b*NNI)>
+			// find L_Ng and calculate b*NNI
+			float total_bnni = 0;
+			for (auto sit2 = pAdjNodes->begin(); sit2 != endsit2; sit2++) {
+				Node* pNode = &(g.nodes[sit2->id]);
+				unsigned c_id = pNode->dominant_c;
+				float b = pNode->dominant_b;
+				if (bMap.find(c_id) == bMap.end())
+					// no c_id yet, add it into bMap now
+					bMap[c_id] = b * sit2->pInfo->nni;
+				else 
+					bMap[c_id] += b * sit2->pInfo->nni;
+				total_bnni += b * sit2->pInfo->nni;
+			}
+			// calculate b', filter by >= 1/|L'|
+			float threshold = 1.0 / bMap.size();
+			float total_b = 0;
+			unsigned int max_cid = 0;
+			float max_b = 0;
+			auto endmit = bMap.end();
+			unsigned int label_set_size = 0;
+			for (auto mit = bMap.begin(); mit != endmit; mit++) {
+				float new_b = mit->second / total_bnni;
+				if (new_b > threshold - 1e-6) {
+					// find a valid <c,b>
+					label_set_size += 1;
+					total_b += new_b;
+					if (new_b > max_b) {
+						// update dominant label candidate
+						max_b = new_b;
+						max_cid = mit->first;
+					}
+				}
+			}
+			// update dominant label
+			if (pNode->dominant_c != max_cid) {
+				pNode->dominant_c = max_cid;
+				update = true;
+			}
+			pNode->dominant_b = max_b / total_b;
+
+			// judge whether size of label set changes
+			if (label_set_size != pNode->label_set_size)
+				update = true;
+
+			// save L''
+			pNode->communities.clear();
+			for (auto mit = bMap.begin(); mit != endmit; mit++) {
+				float new_b = mit->second / total_bnni;
+				if (new_b > threshold - 1e-6) {
+					pNode->communities.push_back(mit->first);
+				}
+			}
+		}
+		// finish one iteration
+		if (!update) {
+			break; // break if no update in this iteration
+		}
+			
+		t += 1;
 	}
 
 	return;

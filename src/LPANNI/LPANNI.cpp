@@ -18,5 +18,8 @@ int main()
 	graph.printSim();
 	graph.printNNI();
 
+	worker.propagation(graph, 3);
+	graph.printCommunityPerNode();
+
 	return 0;
 }
