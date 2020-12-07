@@ -14,5 +14,9 @@ int main()
 	worker.calculate_NI(graph);
 	graph.printNI();
 
+	worker.calculate_SIM_NNI(graph, 3);
+	graph.printSim();
+	graph.printNNI();
+
 	return 0;
 }

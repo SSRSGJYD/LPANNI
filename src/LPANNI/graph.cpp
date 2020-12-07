@@ -55,6 +55,8 @@ Graph::Graph(string file)
 	sgetstr(p);
 	this->edgeNum = sgetunsigned(p);
 	this->nodes.resize(550000);
+	this->EdgeInfoPool = new ToEdgeInfo[2 * this->edgeNum + 1];
+	this->firstValidPool = 0;
 
 	// read in edges
 	sgetline(p);
@@ -64,8 +66,9 @@ Graph::Graph(string file)
 		s = sgetunsigned(p);
 		sgetstr(p);
 		e = sgetunsigned(p);
-		this->nodes[s].adjNodes.insert(ToEdge(e));
-		this->nodes[e].adjNodes.insert(ToEdge(s));
+		
+		this->nodes[s].adjNodes.insert(ToEdge(e, *this, true));
+		this->nodes[e].adjNodes.insert(ToEdge(s, *this, true));
 		this->nodes[s].id = s;
 		this->nodes[e].id = e;
 		if (**p == '\0')
@@ -76,6 +79,11 @@ Graph::Graph(string file)
 	return;
 }
 
+Graph::~Graph()
+{
+	delete [] this->EdgeInfoPool;
+}
+
 void Graph::printNI()
 {
 	auto endit = this->nodes.end();
@@ -84,4 +92,40 @@ void Graph::printNI()
 		cout << "id: " << it->id << ", NI: " << it->NI << endl;
 	}
 	return;
+}
+
+void Graph::printSim()
+{
+	auto endit = this->nodes.end();
+	for (auto it = this->nodes.begin(); it != endit; it++) {
+		if (it->id == 0) continue;
+		cout << "id: " << it->id << ", Sim: ";
+		auto sendit = it->adjNodes.end();
+		for (auto sit = it->adjNodes.begin(); sit != sendit; sit++) {
+			cout << sit->pInfo->sim << " ";
+		}
+		cout << endl;
+	}
+	return;
+}
+
+void Graph::printNNI()
+{
+	auto endit = this->nodes.end();
+	for (auto it = this->nodes.begin(); it != endit; it++) {
+		if (it->id == 0) continue;
+		cout << "id: " << it->id << ", NNI: ";
+		auto sendit = it->adjNodes.end();
+		for (auto sit = it->adjNodes.begin(); sit != sendit; sit++) {
+			cout << sit->pInfo->nni << " ";
+		}
+		cout << endl;
+	}
+	return;
+}
+
+ToEdgeInfo * getEdgeInfo(Graph & g)
+{
+	g.firstValidPool += 1;
+	return g.EdgeInfoPool + (g.firstValidPool - 1);
 }
