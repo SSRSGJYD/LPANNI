@@ -17,8 +17,10 @@ ToEdgeInfo* getEdgeInfo(Graph& g);
 
 typedef struct ToEdge {
 	ToEdge(int id, Graph& g, bool info=false) :id(id) { 
-		if(info)
+		if (info)
 			pInfo = getEdgeInfo(g);
+		else
+			pInfo = nullptr;
 	}
 	int id;
 	ToEdgeInfo *pInfo;

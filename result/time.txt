@@ -1,0 +1,11 @@
+Time: 67.238
+Time: 69.109
+Time: 69.556
+Time: 71.277
+Time: 71.262
+Time: 70.398
+Time: 71.451
+Time: 70.363
+Time: 70.466
+Time: 69.915
+average time:70.1035

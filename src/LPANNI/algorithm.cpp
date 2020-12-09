@@ -76,10 +76,11 @@ void LPANNI::calculate_SIM_NNI(Graph & g, unsigned int alpha)
 						}
 					}
 				}
-				free(pLastDest);
+				delete pLastDest;
 				pLastDest = pNewDest;
 				plen++;
 			}
+			delete pLastDest;
 			auto it2 = g.nodes[sit->id].adjNodes.find(ToEdge(it->id, g));
 			it2->pInfo->s = sit->pInfo->s;
 		}
