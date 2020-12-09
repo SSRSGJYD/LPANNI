@@ -102,6 +102,7 @@ public:
 	void printSim();
 	void printNNI();
 	void printCommunityPerNode();
+	void saveCommunity(string file);
 
 public:
 	unsigned int nodeNum, edgeNum;

@@ -139,6 +139,34 @@ void Graph::printCommunityPerNode()
 	return;
 }
 
+void Graph::saveCommunity(string file)
+{
+	FILE *fp;
+	fopen_s(&fp, file.c_str(), "a");
+	char *buffer = (char*)malloc(this->nodeNum + 10);
+	unsigned int offset = 0;
+	auto endit = this->nodes.end();
+	for (auto it = this->nodes.begin(); it != endit; it++) {
+		if (it->id == 0) continue;
+		offset += sprintf_s(buffer + offset, this->nodeNum + 1 - offset, "%d", it->id);
+		auto sendit = it->communities.end();
+		for (auto sit = it->communities.begin(); sit != sendit; sit++) {
+			offset += sprintf_s(buffer + offset, this->nodeNum + 1 - offset, " %d", *sit);
+		}
+		offset += sprintf_s(buffer + offset, this->nodeNum + 1 - offset, "\n");
+		// when buffer is nearly full, write into file
+		if (this->nodeNum + 1 < offset + 100) {
+			fwrite(buffer, offset, 1, fp);
+			offset = 0;
+		}
+	}
+	if(offset > 0)
+		fwrite(buffer, offset, 1, fp); // write remaining text
+	fclose(fp);
+	free(buffer);
+	return;
+}
+
 ToEdgeInfo * getEdgeInfo(Graph & g)
 {
 	g.firstValidPool += 1;

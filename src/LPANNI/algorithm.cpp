@@ -29,7 +29,6 @@ void LPANNI::calculate_NI(Graph & g)
 		min_e_plus_k = e_plus_k < min_e_plus_k ? e_plus_k : min_e_plus_k;
 		max_e_plus_k = e_plus_k > max_e_plus_k ? e_plus_k : max_e_plus_k;
 	}
-	std::cout << "max_e_plus_k: " << max_e_plus_k << ", min_e_plus_k: " << min_e_plus_k << std::endl;
 	
 	// calculate NI
 	float diff = float(max_e_plus_k - min_e_plus_k);
@@ -70,6 +69,8 @@ void LPANNI::calculate_SIM_NNI(Graph & g, unsigned int alpha)
 						for (auto sit3 = g.nodes[*sit2].adjNodes.begin(); sit3 != endsit2; sit3++) {
 							if(sit3->id == sit->id)
 								sit->pInfo->s += 1.0 / plen;
+							/*else
+								pNewDest->push_back(sit3->id);*/
 							else if(sit3->id != it->id)
 								pNewDest->push_back(sit3->id);
 						}
@@ -102,11 +103,13 @@ void LPANNI::calculate_SIM_NNI(Graph & g, unsigned int alpha)
 		auto sendit = it->adjNodes.end();
 		// calculate sim of (u,v)
 		float max_sim = 0;
+		//float sum_sim = 0;
 		for (auto sit = it->adjNodes.begin(); sit != sendit; sit++) {
 			if (it->id == sit->id) continue;
 			float sim = sit->pInfo->s / sqrt(it->total_s * g.nodes[sit->id].total_s);
 			sit->pInfo->sim = sim;
 			max_sim = sim > max_sim ? sim : max_sim;
+			//sum_sim += sim;
 		}
 
 		// normalize sim to [0,1] and calculate NNI
@@ -160,8 +163,8 @@ void LPANNI::propagation(Graph & g, unsigned int T)
 			// calculate b', filter by >= 1/|L'|
 			float threshold = 1.0 / bMap.size();
 			float total_b = 0;
-			unsigned int max_cid = 0;
 			float max_b = 0;
+			set<unsigned int> candidate_dominant;
 			auto endmit = bMap.end();
 			unsigned int label_set_size = 0;
 			for (auto mit = bMap.begin(); mit != endmit; mit++) {
@@ -170,16 +173,21 @@ void LPANNI::propagation(Graph & g, unsigned int T)
 					// find a valid <c,b>
 					label_set_size += 1;
 					total_b += new_b;
-					if (new_b > max_b) {
+					if (new_b > max_b + 1e-6) {
 						// update dominant label candidate
+						candidate_dominant.clear();
 						max_b = new_b;
-						max_cid = mit->first;
+						candidate_dominant.insert(mit->first);
+					}
+					else if (new_b > max_b - 1e-6) {
+						// same b, also update dominant label candidate
+						candidate_dominant.insert(mit->first);
 					}
 				}
 			}
-			// update dominant label
-			if (pNode->dominant_c != max_cid) {
-				pNode->dominant_c = max_cid;
+			if (candidate_dominant.count(pNode->dominant_c) == 0) {
+				// update dominant label
+				pNode->dominant_c = *(candidate_dominant.begin());
 				update = true;
 			}
 			pNode->dominant_b = max_b / total_b;

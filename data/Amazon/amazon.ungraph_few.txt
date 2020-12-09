@@ -1,0 +1,5 @@
+# Undirected graph: ../../data/output/amazon.ungraph.txt
+# Amazon
+# Nodes: 334863 Edges: 925872
+# FromNodeId	ToNodeId
+1	88160
