@@ -1,7 +1,5 @@
-# Undirected graph
-# From Paper
-# Nodes: 9 Edges: 16
-# FromNodeId	ToNodeId
+9 
+16
 1	2
 1	4
 1	6

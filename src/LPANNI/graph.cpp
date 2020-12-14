@@ -9,7 +9,7 @@ Graph::Graph()
 }
 
 void sgetline(char **text) {
-	while (**text != '\n') {
+	while (**text != '\n' && **text != '\r') {
 		(*text)++;
 	}
 	(*text)++;
@@ -18,6 +18,8 @@ void sgetline(char **text) {
 void sgetstr(char **text) {
 	while (**text > '9' || **text < '0') {
 		(*text)++;
+		if (**text == '\0')
+			break;
 	}
 }
 
@@ -48,32 +50,31 @@ Graph::Graph(string file)
 
 	char *str = text;
 	char **p = &str;
-	sgetline(p);
-	sgetline(p);
-	sgetstr(p);
 	this->nodeNum = sgetunsigned(p);
 	sgetstr(p);
 	this->edgeNum = sgetunsigned(p);
-	this->nodes.resize(550000);
-	this->EdgeInfoPool = new ToEdgeInfo[2 * this->edgeNum + 1];
+	sgetstr(p);
+	//this->nodes.resize(550000);
+	this->nodes.resize(this->nodeNum + 1);
+	this->EdgeInfoPool = new ToEdgeInfo[2 * this->edgeNum + 1]();
 	this->firstValidPool = 0;
 
 	// read in edges
-	sgetline(p);
-	sgetline(p);
 	unsigned int s, e;
+	unsigned int count = 0;
 	while (**p != '\0') {
 		s = sgetunsigned(p);
 		sgetstr(p);
 		e = sgetunsigned(p);
-		
-		this->nodes[s].adjNodes.insert(ToEdge(e, *this, true));
-		this->nodes[e].adjNodes.insert(ToEdge(s, *this, true));
-		this->nodes[s].id = s;
-		this->nodes[e].id = e;
+		sgetstr(p);
+		if (s < e) {
+			this->nodes[s].adjNodes.insert(ToEdge(e, *this, true));
+			this->nodes[e].adjNodes.insert(ToEdge(s, *this, true));
+			this->nodes[s].id = s;
+			this->nodes[e].id = e;	
+		}
 		if (**p == '\0')
 			break;
-		sgetstr(p);
 	}
 	free(text);
 	return;
