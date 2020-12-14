@@ -1,0 +1,10 @@
+{
+    "python.venvPath": "C:\\zzp\\_MyWorkingPlace",
+    "python.venvFolders": [
+        "torch_env",
+    ],
+    "python.pythonPath": "C:\\zzp\\_MyWorkingPlace\\torch_venv\\Scripts\\python.exe",
+    "window.zoomLevel": 0,
+    "editor.fontSize": 22,
+    "python.formatting.provider": "autopep8"
+}
