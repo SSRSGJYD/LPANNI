@@ -87,3 +87,40 @@ Time of community detection:
 | 100000          | 45.9737                          | 48.8713                        |
 
 This result is nearly 2 times faster compared with the time cost reported in the paper (figure 10).
+
+
+## Query and Visualization
+
+The native graph database [Neo4j](https://neo4j.com/) is used to store the results of community detection and support graph-related queries. The results are managed as labeled and directed graphs in Neo4j, of which the structure is shown below.
+
+| Type         | Labels    | Properties | Meanings                                    |
+| ------------ | --------- | ---------- | ------------------------------------------- |
+| Node         | Node      | nid        | A node from the orginal datasets            |
+| Node         | Community | cid        | A detected community                        |
+| Relationship | Relation  | /          | An edge from the orginal datasets           |
+| Relationship | BelongTo  | /          | A node belongs to some specific communities |
+| Relationship | CenterAt  | /          | A community is centered at a specific node  |
+
+![avatar](figures/GraphStructure.png)
+
+Queries are executed in Neo4j Browser using Cypher, which is a declarative graph query language supported by Neo4j. Neo4j Browser also provides graph visulization for the query results. The two example query related to community dection are shown below.
+
++ Query for the communities containing a specific node, such as the node with nid = 1.  
+  + Cypher:  
+    > MATCH (n:Node)-[:BelongTo]->(c:Community)  
+    > WHERE n.nid = 1  
+    > MATCH (cn:Node)-[:BelongTo]->(c)
+    > RETURN c, cn  
+  + Result Visualization:  
+    >![avatar](figures/QueryExample1.png)
++ Query for the communities containing nodes of given quantity, such more than 100.
+  + Cypher:
+    > MATCH (c:Community)  
+    > WITH count((:Node)-[:BelongTo]->(c)) AS quantity  
+    > WHERE quantity > 100  
+    > WITH c  
+    > MATCH (cn:Node)-[:BelongTo]->(c)  
+    > RETURN c, cn  
+    >> For large graphs, this may cause too many matched communities and make the Neo4j Browser crash. It would be better to limit the number of matched communities using "WITH c LIMIT 1" instead of the fourth line "WITH c".
+  + Result Visualization:
+    >![avatar](figures/QueryExample2.png)
