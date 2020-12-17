@@ -34,3 +34,6 @@ x64/
 # Executables
 *.out
 *.app
+
+# Python Jupyter Notebook Checkpoints
+src/Neo4jUtils/.ipynb_checkpoints/

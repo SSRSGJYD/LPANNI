@@ -1,0 +1,7 @@
+{"Neo4j": 
+ {"uri":"bolt://localhost:7687", 
+  "user":"neo4j", 
+  "password":"123456"}, 
+ "NetworkFilePath": "../../data/Amazon/amazon.ungraph.txt",
+ "ResultFilePath": "../../result/amazon_result.txt"
+}
