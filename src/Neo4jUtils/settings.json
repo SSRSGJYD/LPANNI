@@ -3,5 +3,6 @@
   "user":"neo4j", 
   "password":"123456"}, 
  "NetworkFilePath": "../../data/Amazon/amazon.ungraph.txt",
+ "CommunityFilePath": "../../data/Amazon/amazon.top5000.cmty.txt",
  "ResultFilePath": "../../result/amazon_result.txt"
 }
