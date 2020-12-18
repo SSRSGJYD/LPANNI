@@ -118,7 +118,7 @@ We follow the paper and use the following evaluation metrics:
 + NMI_max [<sup>3</sup>](##Reference)
 + omega [<sup>4</sup>](##Reference)
 
-Evaluation codes are put under `src/Metrics`. Run `FScore.py` and `NMI.py` to evaluate, and run `plot.py` to plot evaluation results.
+Evaluation codes are put under `src/Metrics`. Run `FScore.py` and `NMI_Omega.py` to evaluate, and run `plot.py` to plot evaluation results.
 
 Precision on synthetic datasets:
 
@@ -140,8 +140,9 @@ NMI_max on synthetic datasets:
 
 <img src="figures/NMI_max.png" style="zoom: 20%;" />
 
+Omega on synthetic datasets:
 
-
+<img src="figures/omega.png" style="zoom: 20%;" />
 
 ## Query and Visualization
 

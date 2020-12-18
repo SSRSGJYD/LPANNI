@@ -25,6 +25,10 @@ if __name__ == "__main__":
     for key in ['NMI', 'NMI_max']:
         plot_metric(NMI_result, key)
 
+    with open('LFR_omega.json', 'r') as f:
+        Omega_result = json.load(f)
+    plot_metric(Omega_result, 'omega')
+
     with open('FScore.json', 'r') as f:
         FScore_result = json.load(f)
     for key in ['Precision', 'Recall', 'FScore']:
