@@ -1,6 +1,6 @@
 # LPANNI
 
-Unofficial implementation of "LPANNI: Overlapping Community Detection Using Label Propagation in Large-Scale Complex Networks".
+Unofficial implementation of "LPANNI: Overlapping Community Detection Using Label Propagation in Large-Scale Complex Networks"[<sup>1</sup>](##Reference).
 
 
 
@@ -107,7 +107,16 @@ This result is nearly 2 times faster compared with the time cost reported in the
 
 ## Evaluation
 
+We follow the paper and use the following evaluation metrics:
 
++ Precision
++ Recall
++ F-score
++ NMI [<sup>2</sup>](##Reference)
++ NMI_max [<sup>3</sup>](##Reference)
++ omega [<sup>4</sup>](##Reference)
+
+Evaluation codes are put under `src/Metrics`.
 
 
 
@@ -150,3 +159,14 @@ Queries are executed in Neo4j Browser using Cypher, which is a declarative graph
     
     >![avatar](figures/QueryExample2.png)
 
+
+
+## Reference
+
+[1] Meilian, L. , Zhenlin, Z. , Zhihe, Q. , & Yu, K. . (2018). Lpanni: overlapping community detection using label propagation in large-scale complex networks. IEEE Transactions on Knowledge and Data Engineering, PP, 1-1.
+
+[2] Lancichinetti, A. , Fortunato, S. , & Kertész, János. (2009). Detecting the overlapping and hierarchical community structure of complex networks. New Journal of Physics, 11(3).
+
+[3] McDaid, A. F., Greene, D., & Hurley, N. (2011). Normalized mutual information to evaluate overlapping community finding algorithms. arXiv preprint arXiv:1110.2515.
+
+[4] Linda, M., Collins, &, Clyde, & W., et al. (1988). Omega: a general formulation of the rand index of cluster recovery suitable for non-disjoint solutions. Multivariate Behavioral Research.
