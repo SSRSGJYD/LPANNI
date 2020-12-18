@@ -28,7 +28,7 @@ The pipeline of LPANNI is as follows:
 
 ## Dependencies
 
-We implement LPANNI using C++ in Visual Studio 2017.  You can also run the code in any other environment with c++.
+We implement LPANNI using C++ in Visual Studio 2017.  You can also run the code in any other environment with C++.
 
 We use Python to generate LFR benchmark, evaluate performance and store community detection result into Neo4j. To setup the environment, install Python 3.x and packages in `requirements.txt`:
 
@@ -88,18 +88,18 @@ We follow the configurations in the paper, and repeat each experiment for 3 time
 
 Time of community detection:
 
-| Number of Nodes | Time w/o building graph (second) | Time w building graph (second) |
-| --------------- | -------------------------------- | ------------------------------ |
-| 10000           | 3.08133                          | 3.51267                        |
-| 20000           | 7.343                            | 7.81633                        |
-| 30000           | 11.7357                          | 12.0133                        |
-| 40000           | 16.0267                          | 17.3117                        |
-| 50000           | 20.217                           | 22.138                         |
-| 60000           | 25.0247                          | 26.8197                        |
-| 70000           | 30.1703                          | 32.3223                        |
-| 80000           | 35.3657                          | 38.0373                        |
-| 90000           | 40.7283                          | 43.0053                        |
-| 100000          | 45.9737                          | 48.8713                        |
+| Number of Nodes | Time w/o building graph (second) | Time w/ building graph (second) |
+| --------------- | -------------------------------- | ------------------------------- |
+| 10000           | 3.08133                          | 3.51267                         |
+| 20000           | 7.343                            | 7.81633                         |
+| 30000           | 11.7357                          | 12.0133                         |
+| 40000           | 16.0267                          | 17.3117                         |
+| 50000           | 20.217                           | 22.138                          |
+| 60000           | 25.0247                          | 26.8197                         |
+| 70000           | 30.1703                          | 32.3223                         |
+| 80000           | 35.3657                          | 38.0373                         |
+| 90000           | 40.7283                          | 43.0053                         |
+| 100000          | 45.9737                          | 48.8713                         |
 
 This result is nearly 2 times faster compared with the time cost reported in the paper (figure 10).
 
@@ -117,6 +117,27 @@ We follow the paper and use the following evaluation metrics:
 + omega [<sup>4</sup>](##Reference)
 
 Evaluation codes are put under `src/Metrics`.
+
+Precision on synthetic datasets:
+
+<img src="figures/Precision.png" style="zoom: 20%;" />
+
+Recall on synthetic datasets:
+
+<img src="figures/Recall.png" style="zoom: 20%;" />
+
+F-Score on synthetic datasets:
+
+<img src="figures/FScore.png" style="zoom: 20%;" />
+
+NMI on synthetic datasets:
+
+<img src="figures/NMI.png" style="zoom: 20%;" />
+
+NMI_max on synthetic datasets:
+
+<img src="figures/NMI_max.png" style="zoom: 20%;" />
+
 
 
 

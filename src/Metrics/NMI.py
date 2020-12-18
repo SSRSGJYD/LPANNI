@@ -42,5 +42,5 @@ if __name__ == "__main__":
                 result[N][mu]['NMI'].append(nmi)
                 result[N][mu]['NMI_max'].append(nmi_max)
 
-    with open('../../result/LFR_nmi.json', 'w') as f:
+    with open('LFR_nmi.json', 'w') as f:
         json.dump(result, f)
