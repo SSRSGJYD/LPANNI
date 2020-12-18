@@ -138,14 +138,14 @@ Queries are executed in Neo4j Browser using Cypher, which is a declarative graph
     >![avatar](figures/QueryExample1.png)
 + Query for the communities that satisfy specific cardinality requirements, e.g. cardinality larger than 100:
   + Cypher:
-    > MATCH (c:Community)  
-    > WITH count((:Node)-[:BelongTo]->(c)) AS quantity  
+    > MATCH (n:Node)-[:BelongTo]->(c:Community)  
+    > WITH c, count(n) AS quantity  
     > WHERE quantity > 100  
     > WITH c  
     > MATCH (cn:Node)-[:BelongTo]->(c)  
     > RETURN c, cn  
     
-    For large graphs, there may be too many matched communities and the Neo4j Browser may crash. It would be better to limit the number of matched communities using "WITH c LIMIT 1" instead of "WITH c" in the fourth line.
+    For large graphs, there may be too many matched communities and the Neo4j Browser may crash. It would be better to limit the number of matched communities using "WITH c LIMIT 1" instead of "WITH c" at the fourth line.
   + Result Visualization:
     
     >![avatar](figures/QueryExample2.png)
