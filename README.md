@@ -26,6 +26,21 @@ The pipeline of LPANNI is as follows:
 
 
 
+## Dependencies
+
+We implement LPANNI using C++ in Visual Studio 2017.  You can also run the code in any other environment with c++.
+
+We use Python to generate LFR benchmark, evaluate performance and store community detection result into Neo4j. To setup the environment, install Python 3.x and packages in `requirements.txt`:
+
++ cdlib
++ jgraph
++ neo4j
++ networkx
+
+We use [Neo4j](https://neo4j.com/) to store the results of community detection and support graph-related queries. 
+
+
+
 ## Implementation
 
 We implement LPANNI using C++ in Visual Studio 2017. 
@@ -50,7 +65,7 @@ Synthetic networks:
 In `src/LFR/`, We provide an Windows executable program to generate LFR benchmark. To generate, run:
 
 ```powershell
-.benchmark -k {} -maxk {} -mu {} -minc {} -maxc {} -om {} -N {} -on {}
+.benchmark -k [k] -maxk [maxk] -mu [mu] -minc [minc] -maxc [maxc] -om [om] -N [N] -on [on]
 ```
 
 For simplicity, run `src/LFR/generate.py` and it will run all commands for you:
@@ -89,31 +104,39 @@ Time of community detection:
 This result is nearly 2 times faster compared with the time cost reported in the paper (figure 10).
 
 
+
+## Evaluation
+
+
+
+
+
 ## Query and Visualization
 
-The native graph database [Neo4j](https://neo4j.com/) is used to store the results of community detection and support graph-related queries. The results are managed as labeled and directed graphs in Neo4j, of which the structure is shown below.
+The native graph database [Neo4j](https://neo4j.com/) is used to store the results of community detection and support graph-related queries. The results are managed as labeled and directed graphs in Neo4j, of which the structure is shown below:
 
 | Type         | Labels    | Properties | Meanings                                    |
 | ------------ | --------- | ---------- | ------------------------------------------- |
-| Node         | Node      | nid        | A node from the orginal datasets            |
+| Node         | Node      | nid        | A node from the original datasets           |
 | Node         | Community | cid        | A detected community                        |
-| Relationship | Relation  | /          | An edge from the orginal datasets           |
+| Relationship | Relation  | /          | An edge from the original datasets          |
 | Relationship | BelongTo  | /          | A node belongs to some specific communities |
 | Relationship | CenterAt  | /          | A community is centered at a specific node  |
 
 ![avatar](figures/GraphStructure.png)
 
-Queries are executed in Neo4j Browser using Cypher, which is a declarative graph query language supported by Neo4j. Neo4j Browser also provides graph visulization for the query results. The two example query related to community dection are shown below.
+Queries are executed in Neo4j Browser using Cypher, which is a declarative graph query language supported by Neo4j. Neo4j Browser also provides graph visualization for the query results. Here are two example queries:
 
-+ Query for the communities containing a specific node, such as the node with nid = 1.  
++ Query for the communities containing a specific node, e.g. the node with nid = 1:
   + Cypher:  
     > MATCH (n:Node)-[:BelongTo]->(c:Community)  
     > WHERE n.nid = 1  
     > MATCH (cn:Node)-[:BelongTo]->(c)
     > RETURN c, cn  
   + Result Visualization:  
+    
     >![avatar](figures/QueryExample1.png)
-+ Query for the communities containing nodes of given quantity, such more than 100.
++ Query for the communities that satisfy specific cardinality requirements, e.g. cardinality larger than 100:
   + Cypher:
     > MATCH (c:Community)  
     > WITH count((:Node)-[:BelongTo]->(c)) AS quantity  
@@ -121,6 +144,9 @@ Queries are executed in Neo4j Browser using Cypher, which is a declarative graph
     > WITH c  
     > MATCH (cn:Node)-[:BelongTo]->(c)  
     > RETURN c, cn  
-    >> For large graphs, this may cause too many matched communities and make the Neo4j Browser crash. It would be better to limit the number of matched communities using "WITH c LIMIT 1" instead of the fourth line "WITH c".
+    
+    For large graphs, there may be too many matched communities and the Neo4j Browser may crash. It would be better to limit the number of matched communities using "WITH c LIMIT 1" instead of "WITH c" in the fourth line.
   + Result Visualization:
+    
     >![avatar](figures/QueryExample2.png)
+
