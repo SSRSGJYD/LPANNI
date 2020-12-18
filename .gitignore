@@ -1,7 +1,8 @@
-# visual studio
+# workspace
 .vs/
 Debug/
 x64/
+.idea/
 
 # Prerequisites
 *.d

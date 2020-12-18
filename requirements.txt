@@ -1,4 +1,6 @@
 cdlib
 jgraph
+matplotlib
 networkx
 neo4j
+numpy

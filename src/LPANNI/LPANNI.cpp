@@ -1,7 +1,4 @@
-﻿// LPANNI.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
-//
-
-#include <iostream>
+﻿#include <iostream>
 #include <sstream>
 #include <time.h> 
 #include "algorithm.h"
@@ -12,10 +9,9 @@ int main()
 	LPANNI worker = LPANNI();
 	unsigned int alpha = 3;
 	unsigned int T = 100;
-	unsigned int repeat = 3;
+	unsigned int repeat = 10;
 
 	// Amazon
-	// Graph graph = Graph(string("../../data/sample.txt"));
 	Graph graph = Graph(string("../../data/amazon/amazon.ungraph.txt"));
 	clock_t start_time = clock();
 	worker.calculate_NI(graph);

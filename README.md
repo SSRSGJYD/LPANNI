@@ -34,8 +34,10 @@ We use Python to generate LFR benchmark, evaluate performance and store communit
 
 + cdlib
 + jgraph
++ matplotlib
 + neo4j
 + networkx
++ numpy
 
 We use [Neo4j](https://neo4j.com/) to store the results of community detection and support graph-related queries. 
 
@@ -116,7 +118,7 @@ We follow the paper and use the following evaluation metrics:
 + NMI_max [<sup>3</sup>](##Reference)
 + omega [<sup>4</sup>](##Reference)
 
-Evaluation codes are put under `src/Metrics`.
+Evaluation codes are put under `src/Metrics`. Run `FScore.py` and `NMI.py` to evaluate, and run `plot.py` to plot evaluation results.
 
 Precision on synthetic datasets:
 
