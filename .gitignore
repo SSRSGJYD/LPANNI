@@ -37,3 +37,4 @@ x64/
 
 # Python Jupyter Notebook Checkpoints
 src/Neo4jUtils/.ipynb_checkpoints/
+src/Metrics/.ipynb_checkpoints/
